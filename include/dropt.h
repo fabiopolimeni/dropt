@@ -41,6 +41,14 @@
     typedef size_t dropt_uintptr;
 #endif
 
+#ifndef DROPT_ALLOC_OVERRIDE
+#define DROPT_MALLOC malloc
+#define DROPT_REALLOC realloc
+#define DROPT_FREE free
+#elif !defined(DROPT_MALLOC) || !defined(DROPT_REALLOC) || !defined(DROPT_FREE)
+#error You need to define all DROPT_MALLOC/DROPT_REALLOC/DROPT_FREE
+#endif
+
 
 #ifdef __cplusplus
 extern "C" {
@@ -64,6 +72,19 @@ extern "C" {
     typedef char dropt_char;
 #endif
 
+/** Generic simple and minimal allocator interface expected to work as realloc.
+  * 
+  * `ptr` If null a new allocation of `size` will be made. If not null the
+  * memory pointed by `ptr` will be reallocated to accommodate at least `size`
+  * bytes.
+  * 
+  * `size` The size of the allocation. If equal 0, and `ptr` is not null,
+  * memory pointed by `ptr` will be released.
+  * 
+  * Return the pointer to the allocated memory. This value is valid to be the
+  * same as the given `ptr`.
+  */
+typedef void* (*dropt_allocator_t)(void* ptr, size_t size);
 
 enum
 {

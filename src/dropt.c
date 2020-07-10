@@ -392,10 +392,10 @@ free_lookup_tables(dropt_context* context)
 {
     if (context != NULL)
     {
-        free(context->sortedByLong);
+        DROPT_FREE(context->sortedByLong);
         context->sortedByLong = NULL;
 
-        free(context->sortedByShort);
+        DROPT_FREE(context->sortedByShort);
         context->sortedByShort = NULL;
     }
 }
@@ -540,8 +540,8 @@ set_error_details(dropt_context* context, dropt_error err,
 
     context->errorDetails.err = err;
 
-    free(context->errorDetails.optionName);
-    free(context->errorDetails.optionArgument);
+    DROPT_FREE(context->errorDetails.optionName);
+    DROPT_FREE(context->errorDetails.optionArgument);
 
     context->errorDetails.optionName = dropt_strndup(optionName.s,
                                                      optionName.len);
@@ -550,7 +550,7 @@ set_error_details(dropt_context* context, dropt_error err,
                                            : dropt_strdup(optionArgument);
 
     /* The message will be generated lazily on retrieval. */
-    free(context->errorDetails.message);
+    DROPT_FREE(context->errorDetails.message);
     context->errorDetails.message = NULL;
 }
 
@@ -706,13 +706,13 @@ dropt_clear_error(dropt_context* context)
     {
         context->errorDetails.err = dropt_error_none;
 
-        free(context->errorDetails.optionName);
+        DROPT_FREE(context->errorDetails.optionName);
         context->errorDetails.optionName = NULL;
 
-        free(context->errorDetails.optionArgument);
+        DROPT_FREE(context->errorDetails.optionArgument);
         context->errorDetails.optionArgument = NULL;
 
-        free(context->errorDetails.message);
+        DROPT_FREE(context->errorDetails.message);
         context->errorDetails.message = NULL;
     }
 }
@@ -954,7 +954,7 @@ dropt_print_help(FILE* f, const dropt_context* context,
     if (helpText != NULL)
     {
         dropt_fputs(helpText, f);
-        free(helpText);
+        DROPT_FREE(helpText);
     }
 }
 #endif /* DROPT_NO_STRING_BUFFERS */
@@ -1434,7 +1434,7 @@ dropt_new_context(const dropt_option* options)
         }
     }
 
-    context = malloc(sizeof *context);
+    context = DROPT_MALLOC(sizeof *context);
     if (context == NULL)
     {
         goto exit;
@@ -1467,7 +1467,7 @@ dropt_free_context(dropt_context* context)
 {
     dropt_clear_error(context);
     free_lookup_tables(context);
-    free(context);
+    DROPT_FREE(context);
 }
 
 

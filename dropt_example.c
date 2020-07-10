@@ -92,7 +92,9 @@ main(int argc, char** argv)
         char** rest = dropt_parse(droptContext, -1, &argv[1]);
         if (dropt_get_error(droptContext) != dropt_error_none)
         {
-            fprintf(stderr, "dropt_example: %s\n", dropt_get_error_message(droptContext));
+            fprintf(stderr, "dropt_example: %s\n", 
+                dropt_get_error_message(droptContext));
+                
             exitCode = EXIT_FAILURE;
         }
         else if (showHelp)

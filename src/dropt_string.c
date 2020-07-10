@@ -144,7 +144,7 @@ dropt_safe_realloc(void* p, size_t numElements, size_t elementSize)
         /* The behavior of `realloc(p, 0)` is implementation-defined.  Let's
          * enforce a particular behavior.
          */
-        free(p);
+        DROPT_FREE(p);
 
         assert(elementSize != 0);
         return NULL;
@@ -157,7 +157,7 @@ dropt_safe_realloc(void* p, size_t numElements, size_t elementSize)
         return NULL;
     }
 
-    return realloc(p, numBytes);
+    return DROPT_REALLOC(p, numBytes);
 }
 
 
@@ -455,7 +455,7 @@ dropt_asprintf(const dropt_char* format, ...)
 dropt_stringstream*
 dropt_ssopen(void)
 {
-    dropt_stringstream* ss = malloc(sizeof *ss);
+    dropt_stringstream* ss = DROPT_MALLOC(sizeof *ss);
     if (ss != NULL)
     {
         ss->used = 0;
@@ -463,7 +463,7 @@ dropt_ssopen(void)
         ss->string = dropt_safe_malloc(ss->maxSize, sizeof *ss->string);
         if (ss->string == NULL)
         {
-            free(ss);
+            DROPT_FREE(ss);
             ss = NULL;
         }
         else
@@ -487,8 +487,8 @@ dropt_ssclose(dropt_stringstream* ss)
 {
     if (ss != NULL)
     {
-        free(ss->string);
-        free(ss);
+        DROPT_FREE(ss->string);
+        DROPT_FREE(ss);
     }
 }
 
